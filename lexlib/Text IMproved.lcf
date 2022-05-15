@@ -339,7 +339,7 @@ object SyntAnal1: TLibSyntAnalyzer
     '^Text'
     '^Separator'
     '-')
-  Extentions = '*.txt'
+  Extentions = 'txt'
   LexerName = 'Text IMproved'
   FullRefreshSize = 40000
   Notes.Strings = (
