@@ -4,6 +4,10 @@ Text IMproved lexer for CudaText text editor (indentation-based folding and synt
 
 This lexer was designed with the `Darcula` theme in mind.
 
+This is how both work together to mimic the IntelliJ IDEA dark theme.
+
+![CudaText with Darcula theme and sample-text](sample-text.png "Darcula theme + Text IMproved lexer")
+
 
 ## Installation
 

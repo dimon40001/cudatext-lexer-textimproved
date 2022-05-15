@@ -1,4 +1,4 @@
-object SyntAnal23: TLibSyntAnalyzer
+object SyntAnal1: TLibSyntAnalyzer
   Formats = <
     item
       DisplayName = 'CommentSingleLine'
@@ -65,6 +65,15 @@ object SyntAnal23: TLibSyntAnalyzer
       Font.Style = []
       BgColor = clMedGray
       BorderTypeTop = blSolid3
+    end
+    item
+      DisplayName = 'BackString'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -17
+      Font.Name = 'Courier New'
+      Font.Style = [fsBold]
+      BgColor = clSilver
     end>
   TokenRules = <
     item
@@ -104,25 +113,32 @@ object SyntAnal23: TLibSyntAnalyzer
       ColumnTo = 0
     end
     item
-      DisplayName = '^Symbol'
-      StyleName = 'Symbol'
-      Expression = 
-        '(?<=^(\x20{4}|\t)*)[\_\*\#\/\,\:\;\=\<\>\+\?\-\$\^\!\%\\\|\~\&\[\]\{' +
-        '\}\(\)\.]+'
+      DisplayName = '^String'
+      StyleName = 'String'
+      Expression = '(?<=^(\x20{4}|\t)*)("|'#39').*?\1|$'
       ColumnFrom = 0
       ColumnTo = 0
     end
     item
-      DisplayName = '^String'
-      StyleName = 'String'
-      Expression = '(?<=^(\x20{4}|\t)*)("|'#39'|`).*?\1|$'
+      DisplayName = '^BackString'
+      StyleName = 'BackString'
+      Expression = '(?<=^(\x20{4}|\t)*)(`).*?\1|$'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^Symbol'
+      StyleName = 'Symbol'
+      Expression = 
+        '(?<=^(\x20{4}|\t)*)[\_\*\#\/\,\:\;\=\<\>\+\?\$\^\!\%\\\|\~\&\[\]' +
+        '\{\}\(\)\"\'#39'\`]+'
       ColumnFrom = 0
       ColumnTo = 0
     end
     item
       DisplayName = '^Text'
       StyleName = 'Text'
-      Expression = '(?<=^(\x20{4}|\t)*)[^.*]'
+      Expression = '(?<=^(\x20{4}|\t)*)[a-zA-Z'#1072'-'#1103#1040'-'#1071'0-9_]+'
       ColumnFrom = 0
       ColumnTo = 0
     end
@@ -146,7 +162,7 @@ object SyntAnal23: TLibSyntAnalyzer
       DisplayName = 'Number'
       StyleName = 'Number'
       TokenType = 2
-      Expression = '\b([\+-]?\d+([\.,]\d+)*%?|0x[0-9a-fA-F]*)(?=\s)'
+      Expression = '(?<=\W)([\+-]?\d+([\.,]\d+)*%?|0x[0-9a-fA-F]*)(?=\W)'
       ColumnFrom = 0
       ColumnTo = 0
     end
@@ -159,18 +175,28 @@ object SyntAnal23: TLibSyntAnalyzer
       ColumnTo = 0
     end
     item
-      DisplayName = 'Symbol'
-      StyleName = 'Symbol'
+      DisplayName = 'String'
+      StyleName = 'String'
       TokenType = 2
-      Expression = '[\_\@\#\/\*\,\.\:\;\=\<\>\+\?\-\$\^\!\%\\\|\~\&\[\]\{\}\(\)]'
+      Expression = '("|'#39').*?\1|$'
       ColumnFrom = 0
       ColumnTo = 0
     end
     item
-      DisplayName = 'String'
-      StyleName = 'String'
+      DisplayName = 'BackString'
+      StyleName = 'BackString'
       TokenType = 2
-      Expression = '("|'#39'|`).*?\1|$'
+      Expression = '(`).*?\1|$'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Symbol'
+      StyleName = 'Symbol'
+      TokenType = 2
+      Expression = 
+        '[\_\@\#\/\*\,\.\:\;\=\<\>\+\?\-\$\^\!\%\\\|\~\&\[\]\{\}\(\)\"\'#39'\' +
+        '`]'
       ColumnFrom = 0
       ColumnTo = 0
     end
@@ -178,7 +204,7 @@ object SyntAnal23: TLibSyntAnalyzer
       DisplayName = 'Text'
       StyleName = 'Text'
       TokenType = 2
-      Expression = '.'
+      Expression = '[a-zA-Z'#1072'-'#1103#1040'-'#1071'0-9_]+'
       ColumnFrom = 0
       ColumnTo = 0
     end>
@@ -213,24 +239,102 @@ object SyntAnal23: TLibSyntAnalyzer
   CodeTemplates = <>
   SubAnalyzers = <>
   SampleText.Strings = (
-    'test'
-    '  test 234'
-    '    test        // comment'
-    '  #test tt http://example.org'
-    '    test ALL_CAPS'
-    '    "test"'
-    '  @test tt'
-    '    test'
-    '    test   '
-    #9'sss pL'
-    '--- Separator '
+    'Text IMproved Styles Introduction'
     ''
-    '// comment'
-    '()    '
-    'test tt'
-    '  test tt'
-    '  test tt'
-    '       ')
+    
+      'Text IMproved lexer for CudaText text editor (indentation-based ' +
+      'folding and simple syntax highlight).'
+    ''
+    'SECTION 1: COMMON STYLES'
+    ''
+    
+      '    This is a regular text style with @Annotation and // single-' +
+      'line comments support'
+    '    '
+    
+      '    Text main contain "double quoted strings", '#39'single quoted st' +
+      'rings'#39', `reverse quoted string similar to Markdown code`'
+    '    '
+    '    Symbols of non-alphabet nature are higlighted:'
+    '        punctuation ,.?!'
+    '        also brackets [](){}<>'
+    '        and virtually !@#$%^&*-_+/|\`~"'#39' every other symbol.'
+    '    '
+    '    Any line starting with "---" or "===" is '
+    '    --- considered a separator (similar to YAML)'
+    '    to make logical separation'
+    '        and increase visibility without'
+    '        === affecting the code tree and folding'
+    '    '
+    
+      '    Abbreviations (or captions or all-capitals words) ARE also _' +
+      'RECOGNIZED_AND_HIGLIGHTED'
+    '    '
+    '    Number support is provided for a range of formats:'
+    '        integer 42'
+    '        floating point 3.14 or 2,71 using dot or comma'
+    '        posistive +36.6 and negative -273,15 values'
+    '        hexadecimal values are recognized as well 0xFFFF'
+    
+      '        there is no special highlight for binary or octal number' +
+      's'
+    '    '
+    
+      '    Browser web-links http://github.com are highlighted by CudaT' +
+      'ext engine automatically.'
+    '    (If `links_hilite` option is enabled in configuration).'
+    '    '
+    ''
+    'SECTION 2: USING INDENTATION'
+    ''
+    
+      '    Code tree is built automatically based on the indentation (t' +
+      'abs or 4 spaces).'
+    '    '
+    
+      '    There are 3 ways to exclude a line from being rendered in th' +
+      'e code tree (can be used to avoid clutter):'
+    '        . start a line with the "dot"'
+    '        - start a line with the "dash"'
+    
+      '         using uneven indentation (5, 6, 7 spaces) should also d' +
+      'o the trick'
+    ''
+    
+      '    For improved readability list items can be separated with bl' +
+      'ank lines or separators:'
+    '        Logical group 1 item 1'
+    '        Logical group 1 item 2'
+    '        '
+    '        Logical group 2 item A '
+    '        Logical group 2 item B '
+    '        --- here separator is used instead of blank line'
+    '        Logical group 3 item I '
+    '        Logical group 3 item II'
+    '    '
+    '    This'
+    '        is'
+    '            example'
+    '            of'
+    '                multi'
+    '        level'
+    '        indentation of `simple` text.'
+    '        '
+    '    @Any style'
+    '        "can also" be used'
+    '            / as block start '
+    '                2.16 even numbers'
+    '                    --- but not the separators'
+    '                // however comments'
+    '                and'
+    '                    `backquotes` '
+    '                        and'
+    '                    ALL_CAPITALS'
+    '                        and'
+    '                    '#39' unpaired quotes are regognized   '
+    '                    displayed'
+    '            in code'
+    '        tree.')
   TokenTypeNames.Strings = (
     '^Text'
     '^Separator'
@@ -239,10 +343,8 @@ object SyntAnal23: TLibSyntAnalyzer
   LexerName = 'Text IMproved'
   FullRefreshSize = 40000
   Notes.Strings = (
-    'Lexer with syntax-higlight and indentation-based folding.'
-    
-      'Lines starting with "*" or "." are not included in the block tre' +
-      'e.')
+    'Text IMproved lexer for CudaText text editor '
+    '(indentation-based folding and simple syntax highlight).')
   LineComment = '//'
   Charset = DEFAULT_CHARSET
 end
