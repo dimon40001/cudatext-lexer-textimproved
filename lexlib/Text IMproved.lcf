@@ -1,0 +1,248 @@
+object SyntAnal23: TLibSyntAnalyzer
+  Formats = <
+    item
+      DisplayName = 'CommentSingleLine'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGray
+      Font.Height = -13
+      Font.Name = 'Courier New'
+      Font.Style = [fsItalic]
+    end
+    item
+      DisplayName = 'Number'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clAqua
+      Font.Height = -13
+      Font.Name = 'Courier New'
+      Font.Style = [fsBold]
+    end
+    item
+      DisplayName = 'String'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clLime
+      Font.Height = -13
+      Font.Name = 'Courier New'
+      Font.Style = []
+    end
+    item
+      DisplayName = 'Symbol'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clYellow
+      Font.Height = -13
+      Font.Name = 'Courier New'
+      Font.Style = [fsBold]
+    end
+    item
+      DisplayName = 'Annotation'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clYellow
+      Font.Height = -17
+      Font.Name = 'Courier New'
+      Font.Style = []
+    end
+    item
+      DisplayName = 'AllCapitals'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -17
+      Font.Name = 'Courier New'
+      Font.Style = []
+    end
+    item
+      DisplayName = 'Text'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNone
+      Font.Height = -17
+      Font.Name = 'Courier New'
+      Font.Style = [fsUnderline]
+    end
+    item
+      DisplayName = 'Separator'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlue
+      Font.Height = -17
+      Font.Name = 'Courier New'
+      Font.Style = []
+      BgColor = clMedGray
+      BorderTypeTop = blSolid3
+    end>
+  TokenRules = <
+    item
+      DisplayName = 'Separator'
+      StyleName = 'Separator'
+      TokenType = 1
+      Expression = '(?<=^(\x20{4}|\t)*)(---|===)+.*'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^Comment'
+      StyleName = 'CommentSingleLine'
+      Expression = '(?<=^(\x20{4}|\t)*)//.*'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^AllCapitals'
+      StyleName = 'AllCapitals'
+      Expression = '(?-i)(?<=^(\x20{4}|\t)*)\b[A-Z'#1040'-'#1071'_][A-Z'#1040'-'#1071'0-9_]+'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^Number'
+      StyleName = 'Number'
+      Expression = '(?<=^(\x20{4}|\t)*)([\+-]?\d+([\.,]\d+)*%?|0x[0-9a-fA-F]*)(?=\s)'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^Annotation'
+      StyleName = 'Annotation'
+      Expression = '(?<=^(\x20{4}|\t)*)\@[a-zA-Z'#1072'-'#1103#1040'-'#1071'0-9_]+'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^Symbol'
+      StyleName = 'Symbol'
+      Expression = 
+        '(?<=^(\x20{4}|\t)*)[\_\*\#\/\,\:\;\=\<\>\+\?\-\$\^\!\%\\\|\~\&\[\]\{' +
+        '\}\(\)\.]+'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^String'
+      StyleName = 'String'
+      Expression = '(?<=^(\x20{4}|\t)*)("|'#39'|`).*?\1|$'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = '^Text'
+      StyleName = 'Text'
+      Expression = '(?<=^(\x20{4}|\t)*)[^.*]'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Comment'
+      StyleName = 'CommentSingleLine'
+      TokenType = 2
+      Expression = '(?<=\x20)//.*'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'AllCapitals'
+      StyleName = 'AllCapitals'
+      TokenType = 2
+      Expression = '(?-i)\b[A-Z'#1040'-'#1071'_][A-Z'#1040'-'#1071'0-9_]+\b'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Number'
+      StyleName = 'Number'
+      TokenType = 2
+      Expression = '\b([\+-]?\d+([\.,]\d+)*%?|0x[0-9a-fA-F]*)(?=\s)'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Annotation'
+      StyleName = 'Annotation'
+      TokenType = 2
+      Expression = '(?<=\s)\@[a-zA-Z'#1072'-'#1103#1040'-'#1071'0-9_]+'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Symbol'
+      StyleName = 'Symbol'
+      TokenType = 2
+      Expression = '[\_\@\#\/\*\,\.\:\;\=\<\>\+\?\-\$\^\!\%\\\|\~\&\[\]\{\}\(\)]'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'String'
+      StyleName = 'String'
+      TokenType = 2
+      Expression = '("|'#39'|`).*?\1|$'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Text'
+      StyleName = 'Text'
+      TokenType = 2
+      Expression = '.'
+      ColumnFrom = 0
+      ColumnTo = 0
+    end>
+  BlockRules = <
+    item
+      DisplayName = 'BlockRule'
+      ConditionList = <
+        item
+          TokenTypes = 1
+        end>
+      EndOfTextClose = True
+      NameFmt = '%sz0'
+      HighlightPos = cpAny
+      DrawStaple = True
+      GroupIndex = 21
+      CollapseFmt = '%sz0...'
+      IgnoreAsParent = False
+    end
+    item
+      DisplayName = 'Separator'
+      StyleName = 'Separator'
+      BlockType = btLineBreak
+      ConditionList = <
+        item
+          TokenTypes = 2
+        end>
+      HighlightPos = cpAny
+      Pen.Color = clSkyBlue
+      UseCustomPen = True
+      IgnoreAsParent = False
+    end>
+  CodeTemplates = <>
+  SubAnalyzers = <>
+  SampleText.Strings = (
+    'test'
+    '  test 234'
+    '    test        // comment'
+    '  #test tt http://example.org'
+    '    test ALL_CAPS'
+    '    "test"'
+    '  @test tt'
+    '    test'
+    '    test   '
+    #9'sss pL'
+    '--- Separator '
+    ''
+    '// comment'
+    '()    '
+    'test tt'
+    '  test tt'
+    '  test tt'
+    '       ')
+  TokenTypeNames.Strings = (
+    '^Text'
+    '^Separator'
+    '-')
+  Extentions = '*.txt'
+  LexerName = 'Text IMproved'
+  FullRefreshSize = 40000
+  Notes.Strings = (
+    'Lexer with syntax-higlight and indentation-based folding.'
+    
+      'Lines starting with "*" or "." are not included in the block tre' +
+      'e.')
+  LineComment = '//'
+  Charset = DEFAULT_CHARSET
+end

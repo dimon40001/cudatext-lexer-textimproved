@@ -1,0 +1,77 @@
+Text IMproved Styles Introduction
+
+Text IMproved lexer for CudaText text editor (indentation-based folding and syntax highlight).
+
+SECTION 1: COMMON STYLES
+
+    This is a regular text style with @Annotation and // single-line comments support
+    
+    Text main contain "double quoted strings", 'single quoted strings', `reverse quoted string similar to Markdown code`
+    
+    Symbols of non-alphabet nature are higlighted:
+        punctuation ,.?!
+        also brackets [](){}<>
+        and virtually !@#$%^&*-_+/|\`~"' every other symbol.
+    
+    Any line starting with "---" or "===" is 
+    --- considered a separator (similar to YAML)
+    to make logical separation
+        and increase visibility without
+        === affecting the code tree and folding
+    
+    Abbreviations (or captions or all-capitals words) ARE also _RECOGNIZED_AND_HIGLIGHTED
+    
+    Number support is provided for a range of formats:
+        integer 42
+        floating point 3.14 or 2,71 using dot or comma
+        posistive +36.6 and negative -273,15 values
+        hexadecimal values are recognized as well 0xFFFF
+        there is no special highlight for binary or octal numbers
+    
+    Browser web-links http://github.com are highlighted by CudaText engine automatically.
+    (If `links_hilite` option is enabled in configuration).
+
+---                                                                                                                    -
+
+SECTION 2: USING INDENTATION
+
+    Code tree is built automatically based on the indentation (tabs or 4 spaces).
+    
+    There are 3 ways to exclude a line from being rendered in the code tree (can be used to avoid clutter):
+        . start a line with the "dot"
+        - start a line with the "dash"
+         using uneven indentation (5, 6, 7 spaces) should also do the trick
+
+    For improved readability list items can be separated with blank lines or separators:
+        Logical group 1 item 1
+        Logical group 1 item 2
+        
+        Logical group 2 item A 
+        Logical group 2 item B 
+        --- here separator is used instead of blank line
+        Logical group 3 item I 
+        Logical group 3 item II
+    
+    This
+        is
+            example
+            of
+                multi
+        level
+        indentation of `plain` text.
+        
+    @Any style
+        "can also" be used
+            / as block start 
+                2.16 even numbers
+                    --- but not the separators
+                // however comments
+                and
+                    `backquotes` 
+                        and
+                    ALL_CAPITALS
+                        and
+                    ' unpaired quotes are regognized   
+                    displayed
+            in code
+        tree.
